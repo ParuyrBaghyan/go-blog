@@ -19,7 +19,6 @@ func (u *User) Save() error {
 	if err != nil {
 		return err
 	}
-
 	defer stmt.Close()
 
 	hashedPassword, err := utils.HashPassword(u.Password)
