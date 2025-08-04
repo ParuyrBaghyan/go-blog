@@ -6,14 +6,26 @@ import (
 	"go-blog/utils"
 )
 
-type User struct {
+type SignupUser struct {
 	Id       int64
-	UserName string 
+	UserName string `binding:"required"`
 	Email    string `binding:"required"`
-	Password string `binding:"required"`
+	Password string `binding:"required,min=8"`
 }
 
-func (u *User) Save() error {
+type SigninUser struct {
+	Id       int64
+	Email    string `binding:"required"`
+	Password string `binding:"required,min=8"`
+}
+
+type UserProfile struct {
+	Id       int64
+	UserName string `binding:"required"`
+	Email    string `binding:"required"`
+}
+
+func (u *SignupUser) Save() error {
 	query := `INSERT INTO users(userName , email , password) VALUES(?,?,?)`
 	stmt, err := db.DB.Prepare(query)
 	if err != nil {
@@ -34,7 +46,7 @@ func (u *User) Save() error {
 	return err
 }
 
-func (u *User) ValidateCredentials() error {
+func (u *SigninUser) ValidateCredentials() error {
 	query := "SELECT id , password FROM users WHERE email = ?"
 	row := db.DB.QueryRow(query, u.Email)
 
@@ -50,4 +62,17 @@ func (u *User) ValidateCredentials() error {
 	}
 
 	return err
+}
+
+func GetUserById(userId int64) (*SignupUser, error) {
+	query := "SELECT * FROM users WHERE id = ?"
+	row := db.DB.QueryRow(query, userId)
+
+	var user SignupUser
+	err := row.Scan(&user.Id, &user.UserName, &user.Email, &user.Password)
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
 }

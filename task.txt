@@ -3,11 +3,10 @@ Auth system
 ✅ Add User signup Api
 ✅ Add Password encripting
 ✅ Add User signin
- Add JWT
- Finish JWT logic
- Add Token Verification
- Add Auth Middleware
- Use Middleware
+✅ Add JWT
+✅ Add Token Verification
+✅ Add Auth Middleware
+✅ Use Middleware
 
  User
  Get user profile 
