@@ -1,0 +1,33 @@
+Auth system
+✅ Add Users table
+✅ Add User signup Api
+✅ Add Password encripting
+✅ Add User signin
+ Add JWT
+ Finish JWT logic
+ Add Token Verification
+ Add Auth Middleware
+ Use Middleware
+
+ User
+ Get user profile 
+ Update profile
+ Delete account
+ Add Route Protection
+
+ Posts
+ Create post (title, content, tags, author_id)
+ Get all posts (with pagination)
+ Get single post by ID
+ Update post (only by the author)
+ Delete post (only by the author)
+
+ Comments
+ Add comment to a post
+ Get comments for a post
+ Delete comment (only author or admin)
+
+ Tags/Categories (Optional)
+ Create / Get / Assign tags or categories to posts
+
+
