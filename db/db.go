@@ -44,4 +44,21 @@ func createTable() {
 	if err != nil {
 		panic("Could not create users table." + err.Error())
 	}
+
+	createPostsTable := `
+	CREATE TABLE IF NOT EXISTS posts(
+		id INTEGER PRIMARY KEY AUTO_INCREMENT,
+		title VARCHAR(255) NOT NULL,
+		content TEXT NOT NULL,
+		data LONGBLOB,
+		tags TEXT NOT NULL,
+		dateTime DATETIME NOT NULL,
+		author_id INTEGER,
+		FOREIGN KEY(author_id) REFERENCES users(id)
+	);`
+
+	_, err = DB.Exec(createPostsTable)
+	if err != nil {
+		panic("Could not create posts table." + err.Error())
+	}
 }

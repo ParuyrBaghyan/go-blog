@@ -6,7 +6,7 @@ import (
 	"go-blog/utils"
 )
 
-type SignupUser struct {
+type User struct {
 	Id       int64
 	UserName string `binding:"required"`
 	Email    string `binding:"required"`
@@ -19,13 +19,7 @@ type SigninUser struct {
 	Password string `binding:"required,min=8"`
 }
 
-type UserProfile struct {
-	Id       int64
-	UserName string `binding:"required"`
-	Email    string `binding:"required"`
-}
-
-func (u *SignupUser) Save() error {
+func (u *User) Save() error {
 	query := `INSERT INTO users(userName , email , password) VALUES(?,?,?)`
 	stmt, err := db.DB.Prepare(query)
 	if err != nil {
@@ -64,15 +58,51 @@ func (u *SigninUser) ValidateCredentials() error {
 	return err
 }
 
-func GetUserById(userId int64) (*SignupUser, error) {
+func GetUserById(userId int64) (*User, error) {
 	query := "SELECT * FROM users WHERE id = ?"
 	row := db.DB.QueryRow(query, userId)
 
-	var user SignupUser
+	var user User
 	err := row.Scan(&user.Id, &user.UserName, &user.Email, &user.Password)
 	if err != nil {
 		return nil, err
 	}
 
 	return &user, nil
+}
+
+func (u *User) UpdateUserData() error {
+	query := `
+	Update users
+	SET userName = ?, email = ?, password = ?
+	WHERE id = ?
+	`
+
+	stmt, err := db.DB.Prepare(query)
+	if err != nil {
+		return err
+	}
+
+	defer stmt.Close()
+
+	hashedPassword, err := utils.HashPassword(u.Password)
+
+	_, err = stmt.Exec(u.UserName, u.Email, hashedPassword, u.Id)
+
+	return err
+}
+
+func DeleteUser(userId int64) error {
+	query := "DELETE FROM users WHERE id = ?"
+
+	stmt, err := db.DB.Prepare(query)
+	if err != nil {
+		return err
+	}
+
+	defer stmt.Close()
+
+	_, err = stmt.Exec(userId)
+
+	return err
 }
