@@ -1,25 +1,28 @@
 Auth system
 ✅ Add Users table
-✅ Add User signup Api
-✅ Add Password encrypting
-✅ Add User signin
+✅ Add User signup Api      //API
+✅ Add Password encripting
+✅ Add User signin          //API
 ✅ Add JWT
 ✅ Add Token Verification
 ✅ Add Auth Middleware
 ✅ Use Middleware
 
  User
- Get user profile 
- Update profile
- Delete account
- Add Route Protection
+✅ Get user profile     //API
+✅ Update profile       //API
+✅ Delete account       //API
+✅ Add Route Protection
 
  Posts
- Create post (title, content, tags, author_id)
- Get all posts (with pagination)
- Get single post by ID
- Update post (only by the author)
- Delete post (only by the author)
+✅ Create post table(title, content, tags, author_id)
+✅ Get all posts                                    //API    
+ Add pagination
+✅ Get single post by ID                            //API
+ Create user                                        //API
+ Keep image in data
+ Update post (only by the author)                   //API
+ Delete post (only by the author)                   //API
 
  Comments
  Add comment to a post
@@ -28,5 +31,4 @@ Auth system
 
  Tags/Categories (Optional)
  Create / Get / Assign tags or categories to posts
-
 

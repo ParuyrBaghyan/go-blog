@@ -9,7 +9,7 @@ import (
 )
 
 func signup(context *gin.Context) {
-	var user models.SignupUser
+	var user models.User
 	err := context.ShouldBindJSON(&user)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"message": "Could not parse request data."})
@@ -61,10 +61,77 @@ func getUserProfile(context *gin.Context) {
 
 	user, err := models.GetUserById(userId)
 	if err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{"message": "Could not parse request data"+ err.Error()})
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Could not parse request data" + err.Error()})
 		return
 	}
 
-	context.JSON(http.StatusOK, user)
+	context.JSON(http.StatusOK, gin.H{
+		"userId":   user.Id,
+		"userName": user.UserName,
+		"email":    user.Email,
+	})
 
 }
+
+func updateUser(context *gin.Context) {
+	token := context.Request.Header.Get("Authorization")
+	if token == "" {
+		context.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "Not authorized."})
+		return
+	}
+
+	userId, err := utils.VerifyToken(token)
+	if err != nil {
+		context.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "Not authorized." + err.Error()})
+		return
+	}
+
+	_, err = models.GetUserById(userId)
+	if err != nil {
+		context.JSON(http.StatusUnauthorized, gin.H{"message": "Could not fetch the user." + err.Error()})
+	}
+
+	var updateUser models.User
+	err = context.ShouldBindJSON(&updateUser)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"message": "Could not parse request data."})
+		return
+	}
+
+	updateUser.Id = userId
+
+	err = updateUser.UpdateUserData()
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Could not update the user."})
+		return
+	}
+
+	context.JSON(http.StatusOK, gin.H{"message": "User updated successfully!"})
+}
+
+func deleteUser(context *gin.Context) {
+	token := context.Request.Header.Get("Authorization")
+	if token == "" {
+		context.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "Not authorized."})
+		return
+	}
+
+	userId, err := utils.VerifyToken(token)
+	if err != nil {
+		context.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "Not authorized." + err.Error()})
+		return
+	}
+
+	_, err = models.GetUserById(userId)
+	if err != nil {
+		context.JSON(http.StatusUnauthorized, gin.H{"message": "Could not fetch the user." + err.Error()})
+	}
+
+	err = models.DeleteUser(userId)
+	if err != nil {
+		context.JSON(http.StatusUnauthorized, gin.H{"message": "Could not Delte the user." + err.Error()})
+	}
+
+	context.JSON(http.StatusOK, gin.H{"message": "User deleted Successfully!"})
+}
+
