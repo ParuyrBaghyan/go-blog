@@ -1,7 +1,7 @@
 Auth system
 ✅ Add Users table
 ✅ Add User signup Api
-✅ Add Password encripting
+✅ Add Password encrypting
 ✅ Add User signin
  Add JWT
  Finish JWT logic
