@@ -1,5 +1,5 @@
 Auth system
-✅ Add Users table
+✅ Add Users table          
 ✅ Add User signup Api      //API
 ✅ Add Password encripting
 ✅ Add User signin          //API
@@ -17,12 +17,15 @@ Auth system
  Posts
 ✅ Create post table(title, content, tags, author_id)
 ✅ Get all posts                                    //API    
- Add pagination
+✅ Add pagination
 ✅ Get single post by ID                            //API
- Create user                                        //API
- Keep image in data
- Update post (only by the author)                   //API
- Delete post (only by the author)                   //API
+✅ Create post                                      //API
+✅ Keep image in data                                 
+✅ Update post (only by the author)                   //API
+✅ Delete post (only by the author)                   //API
+✅ Delete post folder 
+ Create post-media table 
+ Get single post media by ID
 
  Comments
  Add comment to a post

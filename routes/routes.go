@@ -12,14 +12,15 @@ func RegisterRouters(server *gin.Engine) {
 
 	authProfile := server.Group("/profile")
 	authProfile.Use(middlewares.Authenticate)
-	authProfile.GET("/profile", getUserProfile)
-	authProfile.PUT("/profile/update", updateUser)
-	authProfile.DELETE("/profile/delete", deleteUser)
+	authProfile.GET("/", getUserProfile)
+	authProfile.PUT("/update", updateUser)
+	authProfile.DELETE("/delete", deleteUser)
 
 	server.GET("/posts", getAllPosts)
 	server.GET("/posts/:id", getPost)
-	server.POST("/posts/createPost", createPost)
-	// authPosts := server.Group("/posts")
-	// authPosts.Use(middlewares.Authenticate)
-	// authPosts.POST("/posts/createPost", createPost)
+	authPosts := server.Group("/posts")
+	authPosts.Use(middlewares.Authenticate)
+	authPosts.POST("/create", createPost)
+	authPosts.PUT("/update/:id", updatePost)
+	authPosts.DELETE("/delete/:id", deletePost)
 }
