@@ -4,7 +4,10 @@ go 1.24.5
 
 require github.com/gin-gonic/gin v1.10.1
 
-require filippo.io/edwards25519 v1.1.0 // indirect
+require (
+	filippo.io/edwards25519 v1.1.0 // indirect
+	github.com/kolesa-team/go-webp v1.0.5 // indirect
+)
 
 require (
 	github.com/bytedance/sonic v1.11.6 // indirect

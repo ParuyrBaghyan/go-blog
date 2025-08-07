@@ -1,6 +1,7 @@
 package models
 
 import (
+
 	"go-blog/db"
 	"time"
 )
@@ -68,6 +69,7 @@ func (p *Post) Save() error {
 	if err != nil {
 		return err
 	}
+
 	p.Id = postID
 
 	return err

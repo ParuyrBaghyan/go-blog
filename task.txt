@@ -24,8 +24,10 @@ Auth system
 ✅ Update post (only by the author)                   //API
 ✅ Delete post (only by the author)                   //API
 ✅ Delete post folder 
- Create post-media table 
- Get single post media by ID
+✅ Create post-media table 
+✅ Hold media info in post-media table
+✅ Get single post media by ID
+ Change image format WEBP
 
  Comments
  Add comment to a post

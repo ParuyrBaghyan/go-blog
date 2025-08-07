@@ -1,10 +1,10 @@
 package main
 
 import (
+	"github.com/gin-gonic/gin"
 	"go-blog/db"
 	"go-blog/routes"
-
-	"github.com/gin-gonic/gin"
+	"go-blog/utils"
 )
 
 func main() {
@@ -12,7 +12,9 @@ func main() {
 
 	server := gin.Default()
 
+	utils.RegisterStaticFolder(server)
+
 	routes.RegisterRouters(server)
 
-	server.Run(":8080")
+	defer server.Run(":8080")
 }

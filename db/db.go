@@ -61,4 +61,20 @@ func createTable() {
 	if err != nil {
 		panic("Could not create posts table." + err.Error())
 	}
+
+	createPostMediaTable := "CREATE TABLE IF NOT EXISTS post_media (" +
+		"id INT AUTO_INCREMENT PRIMARY KEY," +
+		"post_id INT," +
+		"media_url TEXT NOT NULL," +
+		"media_type VARCHAR(20)," +
+		"`order` INT DEFAULT 0," +
+		"created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
+		"updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP," +
+		"FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE" +
+		");"
+
+	_, err = DB.Exec(createPostMediaTable)
+	if err != nil {
+		panic("Could not create post_medias table." + err.Error())
+	}
 }

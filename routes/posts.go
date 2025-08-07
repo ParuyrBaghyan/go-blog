@@ -1,14 +1,12 @@
 package routes
 
 import (
-	"fmt"
+	"github.com/gin-gonic/gin"
+	mediamethods "go-blog/media_methods"
 	"go-blog/models"
-	"go-blog/utils"
 	"net/http"
 	"strconv"
 	"time"
-
-	"github.com/gin-gonic/gin"
 )
 
 func getAllPosts(context *gin.Context) {
@@ -25,7 +23,6 @@ func getAllPosts(context *gin.Context) {
 	offset := (page - 1) * limit
 
 	posts, err := models.GetPaginatedPosts(limit, offset)
-
 
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "Could not fetch posts."})
@@ -47,7 +44,14 @@ func getPost(context *gin.Context) {
 		return
 	}
 
-	context.JSON(http.StatusOK, post)
+	// postMedia, err := models.GetMediaByPostId(postId)
+	imageUrl, err := models.GetPostMedia(postId)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Could not fetch post media" + err.Error()})
+		return
+	}
+
+	context.JSON(http.StatusOK, gin.H{"post": post, "imageUrl": imageUrl})
 }
 
 func createPost(context *gin.Context) {
@@ -78,7 +82,12 @@ func createPost(context *gin.Context) {
 		return
 	}
 
-	err = utils.AddMedia(context, post.Id)
+	err = mediamethods.SaveMediaInDB(context, post.Id)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Could not save post media in db. Try again later.", "error": err.Error()})
+	}
+
+	err = mediamethods.AddMedia(context, post.Id)
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "Could not save post media. Try again later.", "error": err.Error()})
 	}
@@ -137,8 +146,7 @@ func deletePost(context *gin.Context) {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "Could not fetch the post."})
 		return
 	}
-	fmt.Println("authorId", post.AuthorId)
-	fmt.Println("userId", userId)
+
 	if post.AuthorId != int(userId) {
 		context.JSON(http.StatusUnauthorized, gin.H{"message": "Not authorized to delete post."})
 		return
@@ -150,7 +158,7 @@ func deletePost(context *gin.Context) {
 		return
 	}
 
-	err = utils.RemoveMedia(context, post.Id)
+	err = mediamethods.RemoveMedia(context, post.Id)
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "Could not remove post media. Try again later.", "error": err.Error()})
 	}
